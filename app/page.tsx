@@ -15,47 +15,58 @@ import {
   Calendar,
   Code2,
   Info,
+  Smartphone,
+  Brain,
+  Cloud,
+  Trophy,
+  GraduationCap,
+  Users,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import Image from "next/image"
 import EmvokeLogo from "./logos/emvoke.jpeg"
 import ExideLogo from "./logos/exide.jpeg"
 import HeroA from "../public/photos/1.jpg"
-import HeroB from "../public/photos/2.jpg"
 import HeroC from "../public/photos/3.jpg"
-import HeroD from "../public/photos/4.jpg"
-import HeroE from "../public/photos/5.jpg"
+
+const RESUME_PATH = "/Devansh_Resume.pdf"
+const IOS_LETTER_PATH = "/ios.pdf"
 
 
 export default function Portfolio() {
   const [darkMode, setDarkMode] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [loadingProgress, setLoadingProgress] = useState(0)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [currentText, setCurrentText] = useState(0)
   const [showThemeNotification, setShowThemeNotification] = useState(true)
-
-  const welcomeTexts = ["Welcome", "स्वागत है", "Bienvenue", "Willkommen", "ようこそ", "Bienvenido"]
+  const [visitorCount, setVisitorCount] = useState<number | null>(null)
 
   useEffect(() => {
-    // Loading screen logic
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 5000)
+    const duration = 3500
+    const interval = 50
+    const step = (interval / duration) * 100
+    let progress = 0
 
-    // Text cycling for loading screen
-    const textInterval = setInterval(() => {
-      setCurrentText((prev) => (prev + 1) % welcomeTexts.length)
-    }, 800)
+    const progressTimer = setInterval(() => {
+      progress = Math.min(progress + step, 100)
+      setLoadingProgress(progress)
+      if (progress >= 100) {
+        clearInterval(progressTimer)
+        setTimeout(() => setIsLoading(false), 400)
+      }
+    }, interval)
 
-    return () => {
-      clearTimeout(timer)
-      clearInterval(textInterval)
-    }
+    return () => clearInterval(progressTimer)
+  }, [])
+
+  useEffect(() => {
+    const key = "portfolio-visitor-count"
+    const stored = localStorage.getItem(key)
+    const count = stored ? parseInt(stored, 10) + 1 : 1
+    localStorage.setItem(key, count.toString())
+    setVisitorCount(count)
   }, [])
 
   useEffect(() => {
@@ -76,21 +87,20 @@ export default function Portfolio() {
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-600 flex items-center justify-center z-50">
-        <div className="text-center max-w-4xl mx-auto px-4">
-          <div className="text-4xl md:text-6xl font-bold text-white mb-6 animate-pulse">
+      <div className="fixed inset-0 bg-background/95 backdrop-blur-xl flex items-center justify-center z-50 animate-apple-fade-in">
+        <div className="text-center max-w-md mx-auto px-6 animate-apple-blur-reveal">
+          <div className="text-3xl md:text-4xl font-semibold text-foreground tracking-tight mb-2">
             Devansh Sharma
           </div>
-          <div className="text-xl md:text-2xl text-white/90 mb-6 font-light">
-            Full-Stack Developer | Cybersecurity & AI Enthusiast
+          <div className="text-sm md:text-base text-muted-foreground mb-10 font-light">
+            Full Stack · iOS · AI · Cybersecurity
           </div>
-          <div className="text-2xl md:text-3xl text-white mb-8 h-16 md:h-12 flex items-center justify-center">
-            <span className="animate-fade-in-out font-medium">{welcomeTexts[currentText]}</span>
+          <div className="w-full max-w-xs mx-auto h-[2px] bg-muted rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-100 ease-out"
+              style={{ width: `${loadingProgress}%` }}
+            />
           </div>
-          <div className="w-full max-w-md mx-auto h-2 bg-white/20 rounded-full overflow-hidden">
-            <div className="h-full bg-lime-400 rounded-full animate-loading-bar"></div>
-          </div>
-          <div className="text-white/80 mt-4 text-lg italic">Loading your experience...</div>
         </div>
       </div>
     )
@@ -281,34 +291,31 @@ export default function Portfolio() {
           <div className="space-y-8">
             <div className="space-y-4">
               <h1 className="text-5xl lg:text-7xl font-bold">
-                <span className="block text-foreground">Full-Stack Developer</span>
-                <span className="block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                  Cybersecurity & AI Enthusiast
+                <span className="block text-foreground">Devansh Sharma</span>
+                <span className="block text-2xl lg:text-3xl mt-4 font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                  Full Stack · iOS · AI · Cybersecurity
                 </span>
               </h1>
               <p className="text-xl text-muted-foreground max-w-lg">
-                Building scalable, secure, and AI-powered products that impact users across the globe.
+                Building scalable software across web, mobile, and AI — from patient-facing iOS apps to
+                hackathon-winning platforms for real-world impact.
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-8 text-sm">
-                  <div className="space-y-2">
-                    <div className="text-foreground font-semibold">
-                      Top 3 Hackathon Finalist
+              <div className="space-y-2">
+                <div className="text-foreground font-semibold">Smart India Hackathon Finalist</div>
+                <div className="text-muted-foreground">DevYatra & GyaanGuru — AI-powered platforms</div>
               </div>
-                    <div className="text-muted-foreground">Proven in scalable web apps & microservices</div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-foreground font-semibold">
-                      Global Exposure
-                    </div>
-                    <div className="text-muted-foreground">Projects spanning AI, Blockchain & AR/VR</div>
+              <div className="space-y-2">
+                <div className="text-foreground font-semibold">iOS Developer @ Atlas Medical Solutions</div>
+                <div className="text-muted-foreground">Swift, SwiftUI, MVVM, Core Data & secure healthcare</div>
               </div>
             </div>
 
             <div className="flex flex-wrap gap-4">
               <Button asChild className="bg-indigo-600 hover:bg-indigo-700">
-                <a href="/Devansh_Resume.pdf" download>
+                <a href={RESUME_PATH} download="Devansh_Sharma_Resume.pdf">
                   <Download className="mr-2 h-4 w-4" />
                   Download Resume
                 </a>
@@ -349,6 +356,8 @@ export default function Portfolio() {
         </div>
       </section>
 
+
+
       {/* About Section */}
       <section id="about" className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -361,29 +370,48 @@ export default function Portfolio() {
               
               <div className="space-y-6 text-lg text-muted-foreground">
                 <p className="text-xl text-foreground font-medium leading-relaxed">
-                  I'm <span className="text-indigo-600 font-semibold">Devansh Sharma</span>, a Full-Stack Developer and Cybersecurity Engineer, currently pursuing my B.E. in Computer Science (Cybersecurity) at <span className="text-purple-600 font-semibold">Ramaiah Institute of Technology</span>.
+                  I&apos;m <span className="text-indigo-600 font-semibold">Devansh Sharma</span>, pursuing a{" "}
+                  <span className="text-purple-600 font-semibold">B.E. in Computer Science (Cybersecurity)</span> at{" "}
+                  <span className="text-purple-600 font-semibold">Ramaiah Institute of Technology</span> with a Semester 6
+                  SGPA of <span className="text-indigo-600 font-bold">8.57</span>{" "}
+                  <Button asChild size="sm" variant="outline" className="ml-2 h-6 px-2 py-0 text-xs inline-flex align-middle">
+                    <a href="/reportcard.pdf" download="Report_Card.pdf" target="_blank" rel="noopener noreferrer">
+                      <Download className="mr-1 h-3 w-3" />
+                      View Report Card
+                    </a>
+                  </Button>
                 </p>
-                
+
                 <p className="leading-relaxed">
-                  Experienced in building <span className="text-foreground font-medium">scalable, secure, and AI-powered applications</span> with proven results at <span className="text-blue-600 font-medium">EMVOKE Technologies</span> and <span className="text-green-600 font-medium">Exide Energy</span>.
+                  I build <span className="text-foreground font-medium">scalable software</span> across full stack web,
+                  iOS mobile, AI, and cybersecurity — turning ideas into production-ready products at{" "}
+                  <span className="text-blue-600 font-medium">Atlas Medical Solutions</span>,{" "}
+                  <span className="text-blue-600 font-medium">EMVOKE Technologies</span>, and{" "}
+                  <span className="text-green-600 font-medium">Exide Energy</span>.
                 </p>
-                
+
                 <div className="flex items-start gap-3 p-4 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-lg border border-blue-200/50 dark:border-blue-800/50">
                   <p className="leading-relaxed">
-                    Recognized through <span className="text-foreground font-medium">National Hackathons</span>, <span className="text-foreground font-medium">French Exchange Program</span>, and <span className="text-foreground font-medium">Global University Admits</span>.
+                    Passionate about <span className="text-foreground font-medium">AI</span>,{" "}
+                    <span className="text-foreground font-medium">full stack development</span>,{" "}
+                    <span className="text-foreground font-medium">iOS development</span>, and{" "}
+                    <span className="text-foreground font-medium">cybersecurity</span> — balancing internships,
+                    hackathons, and academics to ship real-world products.
                   </p>
                 </div>
-                
+
                 <p className="leading-relaxed">
-                  Outside of tech, I'm a <span className="text-foreground font-medium">guitarist with 10+ years</span> of creative discipline and a <span className="text-foreground font-medium">fitness-driven learner</span> who thrives on consistency and problem-solving.
+                  Recognized as a <span className="text-foreground font-medium">Smart India Hackathon Finalist</span>,{" "}
+                  <span className="text-foreground font-medium">National Hackathon Top 3</span>, and{" "}
+                  <span className="text-foreground font-medium">French Exchange Ambassador</span>.
                 </p>
-                
+
                 <div className="pt-4">
                   <p className="text-2xl font-bold text-center bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                    Engineer • Innovator • Lifelong Learner
-                </p>
+                    Engineer · Builder · Lifelong Learner
+                  </p>
+                </div>
               </div>
-            </div>
             </div>
             
             <div className="relative">
@@ -401,6 +429,76 @@ export default function Portfolio() {
             Experience
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
+            {/* Atlas Medical Solutions - iOS Developer */}
+            <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-2 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200/50 dark:border-blue-800/50 animate-card-float">
+              <CardHeader>
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-lg bg-white border border-blue-200 dark:bg-white/90 p-1.5 flex items-center justify-center animate-pulse">
+                      <span className="text-blue-600 font-bold text-lg">iOS</span>
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl mb-1">iOS Developer</CardTitle>
+                      <CardDescription className="flex items-center gap-2 text-blue-600 font-medium">
+                        Atlas Medical Solutions, Bengaluru
+                      </CardDescription>
+                    </div>
+                  </div>
+                  <Badge variant="secondary" className="flex items-center gap-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                    <Calendar className="h-3 w-3" />
+                    Oct 2025–Present
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Architected secure patient data management with <span className="text-green-600 font-bold">Biometric Authentication</span></p>
+                      <p className="text-xs text-muted-foreground">via Keychain & WebAuthn (↑ security compliance)</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Built responsive iOS apps with SwiftUI & MVVM architecture</p>
+                      <p className="text-xs text-muted-foreground">with Core Data, Realm, and async/await</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Integrated REST APIs & GraphQL with comprehensive error handling</p>
+                      <p className="text-xs text-muted-foreground">via XCTest & Fastlane CI/CD</p>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Tech Stack Badges */}
+                <div className="pt-3 border-t border-border/50">
+                  <p className="text-xs text-muted-foreground mb-2">Tech Stack:</p>
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 hover:bg-blue-100 transition-all duration-200 cursor-pointer">Swift</Badge>
+                    <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 hover:bg-blue-100 transition-all duration-200 cursor-pointer">SwiftUI</Badge>
+                    <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 hover:bg-blue-100 transition-all duration-200 cursor-pointer">MVVM</Badge>
+                    <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 hover:bg-blue-100 transition-all duration-200 cursor-pointer">Core Data</Badge>
+                    <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 hover:bg-blue-100 transition-all duration-200 cursor-pointer">Combine</Badge>
+                    <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 hover:bg-blue-100 transition-all duration-200 cursor-pointer">Realm</Badge>
+                    <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 hover:bg-blue-100 transition-all duration-200 cursor-pointer">REST/GraphQL</Badge>
+                    <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 hover:bg-blue-100 transition-all duration-200 cursor-pointer">XCTest</Badge>
+                  </div>
+                  <div className="mt-4">
+                    <Button asChild size="sm" variant="outline" className="bg-transparent hover:bg-blue-50 dark:hover:bg-blue-950/50">
+                      <a href={IOS_LETTER_PATH} target="_blank" rel="noopener noreferrer">
+                        <Download className="mr-2 h-4 w-4" />
+                        View Atlas Medical Offer Letter
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* EMVOKE Technologies */}
             <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-2 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200/50 dark:border-blue-800/50 animate-card-float">
               <CardHeader>
@@ -418,7 +516,7 @@ export default function Portfolio() {
                   </div>
                   <Badge variant="secondary" className="flex items-center gap-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                     <Calendar className="h-3 w-3" />
-                    May 2025–Present
+                    May 2025–Oct 2025
                   </Badge>
                 </div>
               </CardHeader>
@@ -426,22 +524,22 @@ export default function Portfolio() {
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
                     <div>
-                      <p className="text-sm font-medium text-foreground">Boosted app load speed <span className="text-green-600 font-bold">↑45%</span> & reduced downtime <span className="text-green-600 font-bold">↓30%</span></p>
-                      <p className="text-xs text-muted-foreground">with scalable React, Node.js, and AWS solutions</p>
+                      <p className="text-sm font-medium text-foreground">Architected and deployed full-stack systems with <span className="text-green-600 font-bold">React, Angular, Node.js</span></p>
+                      <p className="text-xs text-muted-foreground">handling <span className="text-green-600 font-bold">↑45%</span> traffic load & <span className="text-green-600 font-bold">↓30%</span> downtime</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-3">
                     <div>
-                      <p className="text-sm font-medium text-foreground">Secured platforms with IAM, JWT, Terraform, and automated CI/CD</p>
-                      <p className="text-xs text-muted-foreground">via Docker + Kubernetes (<span className="text-green-600 font-bold">↓40%</span> release cycles)</p>
+                      <p className="text-sm font-medium text-foreground">Engineered cloud infrastructure with AWS (Lambda, DynamoDB, RDS)</p>
+                      <p className="text-xs text-muted-foreground">secured with IAM, JWT, Terraform — <span className="text-green-600 font-bold">↓40%</span> release cycles</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-3">
                     <div>
-                      <p className="text-sm font-medium text-foreground">Delivered real-time UI/UX with WebSockets & Grafana</p>
-                      <p className="text-xs text-muted-foreground">(<span className="text-green-600 font-bold">↑55%</span> engagement)</p>
+                      <p className="text-sm font-medium text-foreground">Deployed microservices on Kubernetes with real-time monitoring via Grafana</p>
+                      <p className="text-xs text-muted-foreground">WebSockets for live updates — <span className="text-green-600 font-bold">↑55%</span> user engagement</p>
                     </div>
                   </div>
                 </div>
@@ -451,18 +549,22 @@ export default function Portfolio() {
                   <p className="text-xs text-muted-foreground mb-2">Tech Stack:</p>
                   <div className="flex flex-wrap gap-2">
                     <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 hover:bg-blue-100 transition-all duration-200 cursor-pointer">React</Badge>
+                    <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 hover:bg-blue-100 transition-all duration-200 cursor-pointer">Angular</Badge>
                     <Badge variant="outline" className="text-xs px-2 py-1 bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800 hover:scale-105 hover:bg-green-100 transition-all duration-200 cursor-pointer">Node.js</Badge>
                     <Badge variant="outline" className="text-xs px-2 py-1 bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-300 dark:border-orange-800 hover:scale-105 hover:bg-orange-100 transition-all duration-200 cursor-pointer">AWS</Badge>
+                    <Badge variant="outline" className="text-xs px-2 py-1 bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-300 dark:border-yellow-800 hover:scale-105 hover:bg-yellow-100 transition-all duration-200 cursor-pointer">Lambda</Badge>
+                    <Badge variant="outline" className="text-xs px-2 py-1 bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800 hover:scale-105 hover:bg-purple-100 transition-all duration-200 cursor-pointer">DynamoDB</Badge>
+                    <Badge variant="outline" className="text-xs px-2 py-1 bg-pink-50 text-pink-700 border-pink-200 dark:bg-pink-950 dark:text-pink-300 dark:border-pink-800 hover:scale-105 hover:bg-pink-100 transition-all duration-200 cursor-pointer">RDS</Badge>
                     <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 hover:bg-blue-100 transition-all duration-200 cursor-pointer">Docker</Badge>
                     <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 hover:bg-blue-100 transition-all duration-200 cursor-pointer">Kubernetes</Badge>
-                    <Badge variant="outline" className="text-xs px-2 py-1 bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800 hover:scale-105 hover:bg-green-100 transition-all duration-200 cursor-pointer">MongoDB</Badge>
-                    <Badge variant="outline" className="text-xs px-2 py-1 bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800 hover:scale-105 hover:bg-purple-100 transition-all duration-200 cursor-pointer">Terraform</Badge>
+                    <Badge variant="outline" className="text-xs px-2 py-1 bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950 dark:text-indigo-300 dark:border-indigo-800 hover:scale-105 hover:bg-indigo-100 transition-all duration-200 cursor-pointer">Terraform</Badge>
+                    <Badge variant="outline" className="text-xs px-2 py-1 bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-300 dark:border-red-800 hover:scale-105 hover:bg-red-100 transition-all duration-200 cursor-pointer">Grafana</Badge>
                   </div>
                   <div className="mt-4">
-                    <Button asChild size="sm" variant="outline" className="bg-transparent hover:bg-blue-50 dark:hover:bg-blue-950/50">
+                    <Button asChild size="sm" variant="outline" className="bg-transparent hover:bg-blue-50 dark:hover:bg-blue-950/50 w-full">
                       <a href="/Emvoke.pdf" target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="mr-2 h-4 w-4" />
-                        View Letter
+                        View Offer Letter
                       </a>
                     </Button>
                   </div>
@@ -555,46 +657,48 @@ export default function Portfolio() {
               Featured Projects
             </h3>
             <div className="grid lg:grid-cols-3 gap-8">
-              {/* HeritEdge - AI Cultural Tourism Platform */}
+              {/* DevYatra - AI Temple Crowd Management */}
               <Card className="group hover:shadow-2xl hover:-translate-y-4 transition-all duration-500 bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-950/20 dark:to-pink-950/20 border-purple-200/50 dark:border-purple-800/50 hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-purple-500/30 overflow-hidden">
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-3 mb-2">
-                    {/* removed leading project icon */}
                     <div>
-                      <CardTitle className="text-xl">HeritEdge</CardTitle>
-                      <CardDescription className="text-sm">AI Cultural Tourism Platform</CardDescription>
+                      <CardTitle className="text-xl">DevYatra</CardTitle>
+                      <CardDescription className="text-sm">AI-Powered Temple Crowd Management</CardDescription>
                     </div>
                   </div>
               </CardHeader>
               <CardContent className="space-y-4">
                   <div>
-                    <Badge className="bg-green-600/90 text-white border-0">↑ 65% engagement</Badge>
+                    <Badge className="bg-green-600/90 text-white border-0">Smart India Hackathon Finalist</Badge>
                   </div>
                   <p className="text-sm text-foreground leading-relaxed">
-                    AI-driven multilingual chatbot with gamified AR/VR tours & blockchain-secured data
+                    Multilingual crowd prediction with IoT safety alerts, real-time capacity monitoring & Pinecone RAG with Gemma & Sarvam AI
                   </p>
                   
                   {/* Tech Stack Badges */}
                   <div className="pt-3 border-t border-border/50">
                     <div className="flex flex-wrap gap-2 mb-4">
-                      <Badge variant="outline" className="text-xs px-2 py-1 bg-pink-50 text-pink-700 border-pink-200 dark:bg-pink-950 dark:text-pink-300 dark:border-pink-800 hover:scale-105 transition-all duration-200">Python</Badge>
-                      <Badge variant="outline" className="text-xs px-2 py-1 bg-pink-50 text-pink-700 border-pink-200 dark:bg-pink-950 dark:text-pink-300 dark:border-pink-800 hover:scale-105 transition-all duration-200">Flask</Badge>
-                      <Badge variant="outline" className="text-xs px-2 py-1 bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800 hover:scale-105 transition-all duration-200">LangChain</Badge>
-                      <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 transition-all duration-200">AR/VR</Badge>
-                      <Badge variant="outline" className="text-xs px-2 py-1 bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950 dark:text-indigo-300 dark:border-indigo-800 hover:scale-105 transition-all duration-200">Blockchain</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-pink-50 text-pink-700 border-pink-200 dark:bg-pink-950 dark:text-pink-300 dark:border-pink-800 hover:scale-105 transition-all duration-200">Next.js</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-pink-50 text-pink-700 border-pink-200 dark:bg-pink-950 dark:text-pink-300 dark:border-pink-800 hover:scale-105 transition-all duration-200">React</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800 hover:scale-105 transition-all duration-200">Flask</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 transition-all duration-200">YOLOv8</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950 dark:text-indigo-300 dark:border-indigo-800 hover:scale-105 transition-all duration-200">OpenCV</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800 hover:scale-105 transition-all duration-200">Pinecone</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-300 dark:border-red-800 hover:scale-105 transition-all duration-200">Gemma</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-300 dark:border-orange-800 hover:scale-105 transition-all duration-200">RAG</Badge>
                     </div>
                     
                     <div className="flex gap-2">
                       <Button asChild variant="outline" size="sm" className="flex-1 bg-transparent hover:bg-purple-50 dark:hover:bg-purple-950/50 transition-colors">
-                        <a href="https://github.com/DevanshSharma-GIT/HeritEdge" target="_blank" rel="noopener noreferrer">
+                        <a href="https://github.com/DevanshSharma-GIT" target="_blank" rel="noopener noreferrer">
                           <Github className="mr-2 h-4 w-4" />
                           GitHub
                         </a>
                       </Button>
                       <Button asChild variant="outline" size="sm" className="flex-1 bg-transparent hover:bg-purple-50 dark:hover:bg-purple-950/50 transition-colors">
-                        <a href="https://devanshsharma-git.github.io/HeritEdge/" target="_blank" rel="noopener noreferrer">
+                        <a href="/devyatra.pdf" target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="mr-2 h-4 w-4" />
-                          Demo
+                          View PDF
                   </a>
                 </Button>
                     </div>
@@ -602,45 +706,48 @@ export default function Portfolio() {
               </CardContent>
             </Card>
 
-              {/* DevFarm - AI Local Discovery App */}
+              {/* GyaanGuru - AI Learning Platform */}
               <Card className="group hover:shadow-2xl hover:-translate-y-4 transition-all duration-500 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200/50 dark:border-green-800/50 hover:border-green-300 dark:hover:border-green-700 hover:shadow-green-500/30 overflow-hidden">
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-3 mb-2">
-                    {/* removed leading project icon */}
                     <div>
-                <CardTitle className="text-xl">DevFarm</CardTitle>
-                      <CardDescription className="text-sm">AI Local Discovery App</CardDescription>
+                <CardTitle className="text-xl">GyaanGuru</CardTitle>
+                      <CardDescription className="text-sm">AI-Powered Personalized Learning</CardDescription>
                     </div>
                   </div>
               </CardHeader>
               <CardContent className="space-y-4">
                   <div>
-                    <Badge className="bg-green-600/90 text-white border-0">↑ 55% visibility</Badge>
+                    <Badge className="bg-green-600/90 text-white border-0">Smart India Hackathon Finalist</Badge>
                   </div>
                   <p className="text-sm text-foreground leading-relaxed">
-                    AI-powered cross-platform maps app with real-time vendor discovery & interactive maps
+                    AI roadmap generation, NSQF alignment, multimodal AI mentor, AI-generated notes & videos with Manim & 3D models
                   </p>
                   
                   {/* Tech Stack Badges */}
                   <div className="pt-3 border-t border-border/50">
                     <div className="flex flex-wrap gap-2 mb-4">
-                      <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 transition-all duration-200">React Native</Badge>
-                      <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 transition-all duration-200">TypeScript</Badge>
-                      <Badge variant="outline" className="text-xs px-2 py-1 bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-300 dark:border-orange-800 hover:scale-105 transition-all duration-200">Google Maps API</Badge>
-                      <Badge variant="outline" className="text-xs px-2 py-1 bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800 hover:scale-105 transition-all duration-200">AI</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 transition-all duration-200">Next.js</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 hover:scale-105 transition-all duration-200">React</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-300 dark:border-orange-800 hover:scale-105 transition-all duration-200">Express</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800 hover:scale-105 transition-all duration-200">Flask</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800 hover:scale-105 transition-all duration-200">Supabase</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-300 dark:border-yellow-800 hover:scale-105 transition-all duration-200">Manim</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-300 dark:border-red-800 hover:scale-105 transition-all duration-200">Trellis</Badge>
+                      <Badge variant="outline" className="text-xs px-2 py-1 bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950 dark:text-indigo-300 dark:border-indigo-800 hover:scale-105 transition-all duration-200">RAG</Badge>
                     </div>
                     
                 <div className="flex gap-2">
                       <Button asChild variant="outline" size="sm" className="flex-1 bg-transparent hover:bg-green-50 dark:hover:bg-green-950/50 transition-colors">
-                    <a href="https://github.com/DevanshSharma-GIT/DevFarm" target="_blank" rel="noopener noreferrer">
+                    <a href="https://github.com/DevanshSharma-GIT" target="_blank" rel="noopener noreferrer">
                       <Github className="mr-2 h-4 w-4" />
                       GitHub
                     </a>
                   </Button>
                       <Button asChild variant="outline" size="sm" className="flex-1 bg-transparent hover:bg-green-50 dark:hover:bg-green-950/50 transition-colors">
-                    <a href="/demo-2.mp4" target="_blank" rel="noopener noreferrer">
+                    <a href="/gyaanguru.pdf" target="_blank" rel="noopener noreferrer">
                       <ExternalLink className="mr-2 h-4 w-4" />
-                      Demo
+                      View PDF
                     </a>
                   </Button>
                     </div>
@@ -910,19 +1017,57 @@ export default function Portfolio() {
               Certifications
             </h3>
             
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Google Cloud Career Launchpad */}
+              <Card className="p-6 bg-gradient-to-br from-blue-50/50 to-cyan-50/50 dark:from-blue-950/20 dark:to-cyan-950/20 border-blue-200/50 dark:border-blue-800/50 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:-translate-y-2">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-xs">GCP</span>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground text-sm">Google Cloud Career Launchpad</h4>
+                    <p className="text-xs text-muted-foreground">Cybersecurity Track</p>
+                  </div>
+                </div>
+                <Button asChild className="w-full bg-blue-600 hover:bg-blue-700" size="sm">
+                  <a href="/Google-cloud.pdf" target="_blank" rel="noopener noreferrer">
+                    <Download className="mr-2 h-4 w-4" />
+                    View Certificate
+                  </a>
+                </Button>
+              </Card>
+
+              {/* IBM SkillsBuild */}
+              <Card className="p-6 bg-gradient-to-br from-purple-50/50 to-indigo-50/50 dark:from-purple-950/20 dark:to-indigo-950/20 border-purple-200/50 dark:border-purple-800/50 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 hover:-translate-y-2">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-xs">IBM</span>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground text-sm">IBM SkillsBuild</h4>
+                    <p className="text-xs text-muted-foreground">Security Operations Center</p>
+                  </div>
+                </div>
+                <Button asChild className="w-full bg-purple-600 hover:bg-purple-700" size="sm">
+                  <a href="/ibm.pdf" target="_blank" rel="noopener noreferrer">
+                    <Download className="mr-2 h-4 w-4" />
+                    View Certificate
+                  </a>
+                </Button>
+              </Card>
+
               {/* iOS Development */}
-                             <Card className="p-6 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200/50 dark:border-blue-800/50 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:-translate-y-2">
+              <Card className="p-6 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200/50 dark:border-blue-800/50 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:-translate-y-2">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
                     <span className="text-white font-bold text-xs">iOS</span>
-              </div>
+                  </div>
                   <div>
-                    <h4 className="font-semibold text-foreground">Udemy iOS Development Bootcamp</h4>
-                    <p className="text-sm text-muted-foreground">Comprehensive iOS development training</p>
-              </div>
-            </div>
-                <Button asChild className="w-full bg-indigo-600 hover:bg-indigo-700">
+                    <h4 className="font-semibold text-foreground text-sm">Udemy iOS Development Bootcamp</h4>
+                    <p className="text-xs text-muted-foreground">Comprehensive training</p>
+                  </div>
+                </div>
+                <Button asChild className="w-full bg-indigo-600 hover:bg-indigo-700" size="sm">
                   <a href="/Udemy.png" target="_blank" rel="noopener noreferrer">
                     <Download className="mr-2 h-4 w-4" />
                     View Certification
@@ -931,39 +1076,20 @@ export default function Portfolio() {
           </Card>
 
               {/* Web Development */}
-                             <Card className="p-6 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200/50 dark:border-green-800/50 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 hover:-translate-y-2">
+              <Card className="p-6 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200/50 dark:border-green-800/50 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 hover:-translate-y-2">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
                     <span className="text-white font-bold text-xs">Web</span>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-foreground">Udemy Web Development Bootcamp</h4>
-                    <p className="text-sm text-muted-foreground">The Complete Full-Stack Web Development Bootcamp (61.5 hours)</p>
+                    <h4 className="font-semibold text-foreground text-sm">Udemy Web Development Bootcamp</h4>
+                    <p className="text-xs text-muted-foreground">Full-Stack (61.5 hours)</p>
                   </div>
                 </div>
-                <Button asChild className="w-full bg-green-600 hover:bg-green-700">
+                <Button asChild className="w-full bg-green-600 hover:bg-green-700" size="sm">
                   <a href="/Udemy.png" target="_blank" rel="noopener noreferrer">
                     <Download className="mr-2 h-4 w-4" />
                     View Certification
-                  </a>
-                </Button>
-              </Card>
-
-              {/* Security Training */}
-                             <Card className="p-6 bg-gradient-to-br from-red-50/50 to-pink-50/50 dark:from-red-950/20 dark:to-pink-950/20 border-red-200/50 dark:border-red-800/50 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 hover:-translate-y-2">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-pink-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-xs">Sec</span>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-foreground">Security Analyst Training</h4>
-                    <p className="text-sm text-muted-foreground">Exide Energy Solutions Ltd — Enterprise cybersecurity focus</p>
-                  </div>
-                </div>
-                <Button asChild className="w-full bg-red-600 hover:bg-red-700">
-                  <a href="/exide.jpeg" target="_blank" rel="noopener noreferrer">
-                    <Download className="mr-2 h-4 w-4" />
-                    View Certificate
                   </a>
                 </Button>
               </Card>

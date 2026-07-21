@@ -434,3 +434,89 @@ html {
 
 /* Ensure images respect container */
 img, .next-image, .animated-photo img { max-width: 100%; height: auto; }
+
+/* Apple-style loading screen */
+@keyframes apple-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes apple-blur-reveal {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+@keyframes apple-progress {
+  0% { width: 0%; opacity: 0.6; }
+  20% { opacity: 1; }
+  100% { width: 100%; opacity: 1; }
+}
+
+.animate-apple-fade-in {
+  animation: apple-fade-in 0.8s ease-out forwards;
+}
+
+.animate-apple-blur-reveal {
+  animation: apple-blur-reveal 1.2s ease-out forwards;
+}
+
+.animate-apple-progress {
+  animation: apple-progress 3.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+/* Experience timeline */
+@keyframes timeline-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-timeline-item {
+  animation: timeline-fade-in 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.timeline-line {
+  background: linear-gradient(to bottom, transparent, oklch(0.55 0.2 264), oklch(0.65 0.18 145), oklch(0.55 0.2 264), transparent);
+}
+
+/* Skill card subtle glow */
+.skill-card-group {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+}
+
+.skill-card-group:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px -8px rgba(99, 102, 241, 0.25);
+}
+
+/* Project gallery enhancements */
+.project-gallery-card {
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+}
+
+.project-gallery-card:hover {
+  transform: translateY(-8px) scale(1.01);
+}
+
+.project-gallery-card .tech-badge {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-gallery-card:hover .tech-badge {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+}
